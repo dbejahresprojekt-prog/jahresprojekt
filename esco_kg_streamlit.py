@@ -196,20 +196,20 @@ def load_data():
         archi_xml_path = 'data/DigiVan.xml'
         archi_data = None
         if os.path.exists(archi_xml_path):
-            st.write(f"📁 XML-Datei gefunden: {archi_xml_path}")
-            st.write(f"📊 Dateigröße: {os.path.getsize(archi_xml_path)} Bytes")
+            st.write(f"XML-Datei gefunden: {archi_xml_path}")
+            st.write(f"Dateigröße: {os.path.getsize(archi_xml_path)} Bytes")
             
             try:
                 archi_data = parse_archi_xml(archi_xml_path)
                 if archi_data:
-                    st.success(f"✅ Archi XML-Daten erfolgreich geladen: {len(archi_data.get('capabilities', []))} Capabilities, {len(archi_data.get('resources', []))} Resources")
+                    st.success(f"Archi XML-Daten erfolgreich geladen: {len(archi_data.get('capabilities', []))} Capabilities, {len(archi_data.get('resources', []))} Resources")
                 else:
-                    st.warning("⚠️ Archi XML-Daten konnten nicht geparst werden")
+                    st.warning("Archi XML-Daten konnten nicht geparst werden")
             except Exception as e:
-                st.error(f"❌ Fehler beim Laden der XML-Daten: {str(e)}")
+                st.error(f"Fehler beim Laden der XML-Daten: {str(e)}")
                 archi_data = None
         else:
-            st.warning(f"⚠️ Archi XML-Datei nicht gefunden: {archi_xml_path}")
+            st.warning(f"Archi XML-Datei nicht gefunden: {archi_xml_path}")
             st.write("**Erwarteter Pfad:** data/DigiVan.xml")
         
         # Lade Kompetenzabgleich XML-Daten
@@ -219,14 +219,14 @@ def load_data():
             try:
                 kompetenzabgleich_data = parse_kompetenzabgleich_xml(kompetenzabgleich_xml_path)
                 if kompetenzabgleich_data and kompetenzabgleich_data.get('success'):
-                    st.success(f"✅ Kompetenzabgleich XML-Daten erfolgreich geladen: {len(kompetenzabgleich_data.get('ist_rollen', []))} IST-Rollen, {len(kompetenzabgleich_data.get('soll_skills', []))} SOLL-Skills")
+                    st.success(f"Kompetenzabgleich XML-Daten erfolgreich geladen: {len(kompetenzabgleich_data.get('ist_rollen', []))} IST-Rollen, {len(kompetenzabgleich_data.get('soll_skills', []))} SOLL-Skills")
                 else:
-                    st.warning("⚠️ Kompetenzabgleich XML-Daten konnten nicht geladen werden")
+                    st.warning("Kompetenzabgleich XML-Daten konnten nicht geladen werden")
             except Exception as e:
-                st.error(f"❌ Fehler beim Laden der Kompetenzabgleich XML-Daten: {str(e)}")
+                st.error(f"Fehler beim Laden der Kompetenzabgleich XML-Daten: {str(e)}")
                 kompetenzabgleich_data = None
         else:
-            st.warning(f"⚠️ Kompetenzabgleich XML-Datei nicht gefunden: {kompetenzabgleich_xml_path}")
+            st.warning(f"Kompetenzabgleich XML-Datei nicht gefunden: {kompetenzabgleich_xml_path}")
             st.write("**Erwarteter Pfad:** data/Kompetenzabgleich.xml")
         
         return (employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, 
@@ -801,7 +801,7 @@ def parse_archi_xml(xml_file_path):
         
         # Fallback: Falls keine Elemente gefunden wurden, versuche alternative Strategien
         if not capabilities and not resources:
-            st.write("⚠️ Keine Elemente mit Namespace gefunden, versuche alternative Strategien...")
+            st.write("Keine Elemente mit Namespace gefunden, versuche alternative Strategien...")
             
             # Alternative 1: Suche nach allen Elementen mit xsi:type
             for element in root.findall('.//*'):
@@ -887,7 +887,7 @@ def parse_archi_xml(xml_file_path):
                             'type': 'Resource'
                         })
             
-            st.success(f"✅ Alternative Parsing-Strategie erfolgreich: {len(capabilities)} Capabilities, {len(resources)} Resources gefunden")
+            st.success(f"Alternative Parsing-Strategie erfolgreich: {len(capabilities)} Capabilities, {len(resources)} Resources gefunden")
             
             return {
                 'capabilities': capabilities,
@@ -896,7 +896,7 @@ def parse_archi_xml(xml_file_path):
             }
             
         except Exception as e2:
-            st.error(f"❌ Auch alternative Parsing-Strategie fehlgeschlagen: {str(e2)}")
+            st.error(f"Auch alternative Parsing-Strategie fehlgeschlagen: {str(e2)}")
             return None
 
 @st.cache_data
@@ -1360,7 +1360,7 @@ def main():
     # Navigation
     page = st.sidebar.selectbox(
         "Wählen Sie eine Sektion:",
-        ["Mitarbeiter-Kompetenzprofile", "Berufsabgleich", "Strategische Weiterbildung 🆕", "XML-basierte Kompetenzabgleich 🆕", "Kursempfehlungen", "Gesamtübersicht", "Mitarbeiter-Verwaltung"]
+        ["Mitarbeiter-Kompetenzprofile", "Berufsabgleich", "Strategische Weiterbildung ", "XML-basierte Kompetenzabgleich ", "Kursempfehlungen", "Gesamtübersicht", "Mitarbeiter-Verwaltung"]
     )
     
     # Zeige entsprechende Seite
@@ -1368,9 +1368,9 @@ def main():
         show_employee_profiles(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df, skills_en_df)
     elif page == "Berufsabgleich":
         show_occupation_matching(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df)
-    elif page == "Strategische Weiterbildung 🆕":
+    elif page == "Strategische Weiterbildung ":
         show_strategic_development(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df, archi_data, udemy_courses_df)
-    elif page == "XML-basierte Kompetenzabgleich 🆕":
+    elif page == "XML-basierte Kompetenzabgleich ":
         show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df, skills_en_df, udemy_courses_df)
     elif page == "Kursempfehlungen":
         show_course_recommendations(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, udemy_courses_df, occupations_df)
@@ -2784,14 +2784,14 @@ def show_employee_management(employees_df, kldb_esco_df, occupation_skill_relati
     elif management_option == "Neuen Mitarbeiter anlegen":
         st.subheader("Neuen Mitarbeiter anlegen")
         
-        with st.form("new_employee_form"):
+        with st.form("employee_form"):
             col1, col2 = st.columns(2)
             
             with col1:
-                first_name = st.text_input("Vorname *", key="new_first_name")
+                first_name = st.text_input("Vorname *", key="first_name")
             
             with col2:
-                last_name = st.text_input("Nachname *", key="new_last_name")
+                last_name = st.text_input("Nachname *", key="last_name")
             
             # Generiere automatisch eine Employee_ID
             if first_name and last_name:
@@ -2800,7 +2800,7 @@ def show_employee_management(employees_df, kldb_esco_df, occupation_skill_relati
                 employee_id = f"{first_name[:3].upper()}{last_name[:3].upper()}{timestamp % 10000:04d}"
                 st.info(f"**Generierte Employee-ID:** {employee_id}")
             
-            submitted = st.form_submit_button("Mitarbeiter anlegen")
+            submitted = st.form_submit_button("Anlegen")
             
             if submitted:
                 if first_name and last_name:
@@ -2868,7 +2868,7 @@ def show_employee_management(employees_df, kldb_esco_df, occupation_skill_relati
                     
                     col1, col2 = st.columns(2)
                     with col1:
-                        submitted = st.form_submit_button("Änderungen speichern")
+                        submitted = st.form_submit_button("Speichern")
                     with col2:
                         if st.form_submit_button("Abbrechen"):
                             st.rerun()
@@ -2932,7 +2932,7 @@ def show_employee_management(employees_df, kldb_esco_df, occupation_skill_relati
         globals()['employees_df'] = st.session_state.employees_data
 
 def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df, archi_data, udemy_courses_df):
-    st.header("Strategische Weiterbildung 🆕")
+    st.header("Strategische Weiterbildung ")
     st.info("**Neue Funktionalität:** Diese Sektion nutzt XML-Daten aus Archi, um strategische Weiterbildungsempfehlungen basierend auf Geschäftsmodellen zu generieren.")
     
     # Debug-Informationen anzeigen
@@ -2971,8 +2971,8 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
         # Versuche die XML-Datei manuell zu laden
         xml_path = 'data/DigiVan.xml'
         if os.path.exists(xml_path):
-            st.write(f"✅ XML-Datei gefunden: {xml_path}")
-            st.write(f"📁 Dateigröße: {os.path.getsize(xml_path)} Bytes")
+            st.write(f"XML-Datei gefunden: {xml_path}")
+            st.write(f"Dateigröße: {os.path.getsize(xml_path)} Bytes")
             
             # Versuche manuelles Parsen
             if st.button("XML-Datei manuell neu laden", key="reload_xml_manual"):
@@ -2987,7 +2987,7 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
                 except Exception as e:
                     st.error(f"Fehler beim manuellen Laden: {str(e)}")
         else:
-            st.error(f"❌ XML-Datei nicht gefunden: {xml_path}")
+            st.error(f"XML-Datei nicht gefunden: {xml_path}")
         
         return
     
@@ -3117,8 +3117,8 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
         
         if matching_skills:
             for match in matching_skills[:5]:
-                match_type_icon = "✅" if match['match_type'] == 'exakt' else "🔄"
-                st.write(f"{match_type_icon} {match['future_skill']['skill_name']}")
+                match_type_text = "Exakt" if match['match_type'] == 'exakt' else "Ähnlich"
+                st.write(f"[{match_type_text}] {match['future_skill']['skill_name']}")
                 if match['match_type'] == 'ähnlich':
                     st.write(f"  → Ähnlich zu: {match['current_skill']['skill_label']}")
             if len(matching_skills) > 5:
@@ -3130,7 +3130,7 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
         
         if missing_skills:
             for skill in missing_skills[:5]:
-                st.write(f"❌ {skill['skill_name']}")
+                st.write(f"Fehlt: {skill['skill_name']}")
             if len(missing_skills) > 5:
                 st.write(f"  ... und {len(missing_skills) - 5} weitere")
     
@@ -3170,7 +3170,7 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
                     st.write(f"• {skill['skill_name']}")
                 
                 # Generiere semantische Kursempfehlungen für diese Kategorie
-                st.write("**🎯 Semantische Kursempfehlungen von Udemy:**")
+                st.write("**Semantische Kursempfehlungen von Udemy:**")
                 
                 # Erstelle Skill-Objekte für die Kursempfehlung
                 skill_objects = []
@@ -3337,7 +3337,7 @@ def show_strategic_development(employees_df, kldb_esco_df, occupation_skill_rela
 
 def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_skill_relations_df, skills_df, eures_skills_df, occupations_df, skills_en_df, udemy_courses_df):
     """Zeigt die XML-basierte Kompetenzabgleich-Funktionalität"""
-    st.header("XML-basierte Kompetenzabgleich 🆕")
+    st.header("XML-basierte Kompetenzabgleich ")
     st.info("**Neue Funktionalität:** Diese Sektion nutzt XML-Daten aus Archi, um automatisch IST-Rollen und SOLL-Skills zu extrahieren und Mitarbeiterprofile zu erstellen.")
     
     # Lade beide XML-Dateien
@@ -3372,18 +3372,18 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
     # SOLL-Skills (Capabilities) aus DigiVan.xml
     soll_skills = digivan_data['capabilities']
     
-    st.success(f"✅ Beide XML-Dateien erfolgreich geladen!")
+    st.success(f"Beide XML-Dateien erfolgreich geladen!")
     st.info(f"""
-    **📊 XML-Daten:**
+    **XML-Daten:**
     - **IST-Rollen** (Kompetenzabgleich.xml): {len(ist_rollen)} BusinessActor
     - **SOLL-Skills** (DigiVan.xml): {len(soll_skills)} Capabilities
     """)
     
     # Tabs für verschiedene Funktionalitäten
-    tab1, tab2 = st.tabs(["📋 IST-Rollen aus XML", "🎯 SOLL-Skills zu Jobs"])
+    tab1, tab2 = st.tabs(["IST-Rollen aus XML", "SOLL-Skills zu Jobs"])
     
     with tab1:
-        st.subheader("📋 IST-Rollen aus XML (BusinessActor)")
+        st.subheader("IST-Rollen aus XML (BusinessActor)")
         
         if ist_rollen:
             st.write(f"**Gefundene IST-Rollen:** {len(ist_rollen)}")
@@ -3402,7 +3402,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
             
             # Neue Funktionalität: IST-Rollen mit KldB-Rollen matchen und ESCO-Rollen zuweisen
             st.markdown("---")
-            st.subheader("🎯 IST-Rollen mit KldB-Rollen matchen und ESCO-Rollen zuweisen")
+            st.subheader("IST-Rollen mit KldB-Rollen matchen und ESCO-Rollen zuweisen")
             
             st.write("**Automatisches Matching der gefundenen IST-Rollen mit passenden KldB-Rollen:**")
             
@@ -3421,7 +3421,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                     'IST-Rolle': rolle_name,
                     'Gematcher KldB-Code': kldb_code if kldb_code else 'Nicht gefunden',
                     'Gematcher KldB-Rolle': kldb_label if kldb_label else 'Nicht gefunden',
-                    'Matching-Status': '✅ Gefunden' if kldb_code else '❌ Nicht gefunden'
+                    'Matching-Status': 'Gefunden' if kldb_code else 'Nicht gefunden'
                 })
             
             # Zeige Matching-Ergebnisse
@@ -3431,13 +3431,13 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
             
             # Wähle eine gematchte IST-Rolle für ESCO-Rollen-Zuweisung
             st.markdown("---")
-            st.subheader("🔍 ESCO-Rollen für gematchte IST-Rollen auswählen")
+            st.subheader("ESCO-Rollen für gematchte IST-Rollen auswählen")
             
             # Filtere nur erfolgreich gematchte Rollen
             successful_matches = [match for match in ist_kldb_matches if match['Gematcher KldB-Code'] != 'Nicht gefunden']
             
             if successful_matches:
-                st.success(f"✅ {len(successful_matches)} IST-Rollen erfolgreich mit KldB-Rollen gematcht!")
+                st.success(f"{len(successful_matches)} IST-Rollen erfolgreich mit KldB-Rollen gematcht!")
                 
                 # Dropdown für erfolgreich gematchte Rollen
                 match_options = [f"{match['IST-Rolle']} → {match['Gematcher KldB-Rolle']} ({match['Gematcher KldB-Code']})" for match in successful_matches]
@@ -3519,20 +3519,20 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                             else:
                                 st.write("Keine Skills für diese Rolle gefunden.")
                         else:
-                            st.info("💡 Wählen Sie eine ESCO-Rolle aus, um die Details zu sehen.")
+                            st.info("Wählen Sie eine ESCO-Rolle aus, um die Details zu sehen.")
                     else:
                         st.warning(f"Keine ESCO-Rollen für KldB-Code '{selected_kldb_code}' gefunden.")
             else:
-                st.warning("❌ Keine IST-Rollen konnten erfolgreich mit KldB-Rollen gematcht werden.")
-                st.info("💡 Tipp: Überprüfen Sie die Schreibweise der Rollennamen oder fügen Sie manuell KldB-Codes hinzu.")
+                st.warning("Keine IST-Rollen konnten erfolgreich mit KldB-Rollen gematcht werden.")
+                st.info("Tipp: Überprüfen Sie die Schreibweise der Rollennamen oder fügen Sie manuell KldB-Codes hinzu.")
             
                         # Manuelle KldB-Zuordnung für nicht gematchte Rollen
-            if any(match['Matching-Status'] == '❌ Nicht gefunden' for match in ist_kldb_matches):
+            if any(match['Matching-Status'] == 'Nicht gefunden' for match in ist_kldb_matches):
                 st.markdown("---")
-                st.subheader("📝 Manuelle KldB-Zuordnung für nicht gematchte Rollen")
+                st.subheader("Manuelle KldB-Zuordnung für nicht gematchte Rollen")
                 
                 # Zeige nicht gematchte Rollen
-                unmatched_roles = [match for match in ist_kldb_matches if match['Matching-Status'] == '❌ Nicht gefunden']
+                unmatched_roles = [match for match in ist_kldb_matches if match['Matching-Status'] == 'Nicht gefunden']
                 st.write(f"**Nicht gematchte Rollen:** {len(unmatched_roles)}")
                 
                 # Dropdown für Rollenauswahl
@@ -3548,7 +3548,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                     selected_role_data = next((unmatched for unmatched in unmatched_roles if unmatched['IST-Rolle'] == selected_unmatched_role), None)
                     
                     if selected_role_data:
-                        st.write(f"**🔍 Ausgewählte IST-Rolle:** {selected_role_data['IST-Rolle']}")
+                        st.write(f"**Ausgewählte IST-Rolle:** {selected_role_data['IST-Rolle']}")
                         
                         # Dropdown für KldB-Code Auswahl mit Codes und Bezeichnungen (ohne Duplikate)
                         available_kldb_options = []
@@ -3588,7 +3588,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                             manual_esco_roles = kldb_esco_df[kldb_esco_df['KldB_Code'] == selected_kldb_code]
                             
                             if not manual_esco_roles.empty:
-                                st.success(f"✅ KldB-Code '{selected_kldb_code}' gefunden!")
+                                st.success(f"KldB-Code '{selected_kldb_code}' gefunden!")
                                 st.write(f"**Verfügbare ESCO-Rollen:**")
                                 
                                 # Dropdown für ESCO-Rollen Auswahl
@@ -3634,7 +3634,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                                 
                                                 if save_employees_to_csv(st.session_state.employees_data):
                                                     st.success(f"Rolle '{esco_label}' wurde als aktuelle Rolle zugewiesen und gespeichert!")
-                                                    st.info("💡 Wechseln Sie jetzt zu Tab 'SOLL Skills zu Jobs' um den Kompetenzabgleich durchzuführen!")
+                                                    st.info("Wechseln Sie jetzt zu Tab 'SOLL Skills zu Jobs' um den Kompetenzabgleich durchzuführen!")
                                                 else:
                                                     st.warning(f"Rolle zugewiesen, aber Speichern fehlgeschlagen!")
                                                 
@@ -3644,11 +3644,11 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                     else:
                                         st.write("Keine Skills für diese Rolle gefunden.")
                             else:
-                                st.warning(f"❌ Kein ESCO-Code für KldB-Code '{selected_kldb_code}' gefunden.")
+                                st.warning(f"Kein ESCO-Code für KldB-Code '{selected_kldb_code}' gefunden.")
             
             # Möglichkeit, eine Rolle für automatische Job-Zuordnung auszuwählen
             st.markdown("---")
-            st.subheader("🔍 Automatische Job-Zuordnung testen")
+            st.subheader("Automatische Job-Zuordnung testen")
             
             selected_role = st.selectbox(
                 "Wählen Sie eine Rolle für den Test:",
@@ -3657,14 +3657,14 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                 key="xml_role_test_select"
             )
             
-            if st.button("🔍 Job-Zuordnung finden", key="job_zuordnung_test_tab1"):
+            if st.button("Job-Zuordnung finden", key="job_zuordnung_test_tab1"):
                 with st.spinner("Suche passenden KldB-Code..."):
                     kldb_code, kldb_label = find_kldb_code_for_job_title(
                         selected_role, occupations_df, kldb_esco_df
                     )
                 
                 if kldb_code and kldb_label:
-                    st.success(f"✅ Job-Zuordnung gefunden!")
+                    st.success(f"Job-Zuordnung gefunden!")
                     col1, col2 = st.columns(2)
                     with col1:
                         st.write(f"**Rollenname:** {selected_role}")
@@ -3684,13 +3684,13 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                     if not role_skills.empty:
                                         st.write(f"**Verfügbare Skills:** {len(role_skills)}")
                 else:
-                    st.warning("❌ Keine passende Job-Zuordnung gefunden.")
+                    st.warning("Keine passende Job-Zuordnung gefunden.")
                     st.info("Tipp: Überprüfen Sie die Schreibweise oder fügen Sie manuell einen KldB-Code hinzu.")
         else:
             st.warning("Keine IST-Rollen in der XML gefunden.")
     
     with tab2:
-        st.subheader("🎯 SOLL-Skills zu Jobs - Kompetenzabgleich & Kursempfehlungen")
+        st.subheader("SOLL-Skills zu Jobs - Kompetenzabgleich & Kursempfehlungen")
         
         if soll_skills:
             st.write(f"**Zukünftig benötigte Skills (aus Capabilities):** {len(soll_skills)}")
@@ -3702,7 +3702,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                ('selected_kldb_code_tab2' not in st.session_state or 
                 'selected_esco_role_tab2' not in st.session_state):
                 
-                st.info("💡 **Bitte wählen Sie zuerst eine IST-Rolle im Tab 'IST-Rollen aus XML' aus, um den Kompetenzabgleich durchzuführen.**")
+                st.info("**Bitte wählen Sie zuerst eine IST-Rolle im Tab 'IST-Rollen aus XML' aus, um den Kompetenzabgleich durchzuführen.**")
                 st.write("**Verfügbare SOLL-Skills (Capabilities):**")
                 
                 # Tabelle mit SOLL-Skills
@@ -3728,19 +3728,19 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
             if 'selected_kldb_code_tab2' in st.session_state and 'selected_esco_role_tab2' in st.session_state:
                 selected_kldb_code = st.session_state.selected_kldb_code_tab2
                 selected_esco_role = st.session_state.selected_esco_role_tab2
-                st.success(f"✅ **Ausgewählte IST-Rolle:** {st.session_state.get('selected_role_data_name', 'Manuell ausgewählte Rolle')} → {selected_esco_role} ({selected_kldb_code})")
+                st.success(f"**Ausgewählte IST-Rolle:** {st.session_state.get('selected_role_data_name', 'Manuell ausgewählte Rolle')} → {selected_esco_role} ({selected_kldb_code})")
             elif manual_selection:
                 # Verwende die manuelle Auswahl aus Tab 1
                 selected_kldb_code = manual_selection.split("(")[1].split(")")[0]
                 selected_esco_role = manual_selection.split(" → ")[1].split(" (")[0] if " → " in manual_selection else ""
-                st.success(f"✅ **Ausgewählte IST-Rolle:** {manual_selection}")
+                st.success(f"**Ausgewählte IST-Rolle:** {manual_selection}")
             elif selected_match and selected_match != "Bitte wählen Sie eine gematchte IST-Rolle...":
                 # Extrahiere KldB-Code aus der ursprünglichen Auswahl
                 selected_kldb_code = selected_match.split("(")[1].split(")")[0]
                 selected_esco_role = selected_match.split(" → ")[1].split(" (")[0] if " → " in selected_match else ""
-                st.success(f"✅ **Ausgewählte IST-Rolle:** {selected_match}")
+                st.success(f"**Ausgewählte IST-Rolle:** {selected_match}")
             else:
-                st.warning("❌ Keine IST-Rolle ausgewählt. Bitte wechseln Sie zu Tab 1 und wählen Sie eine Rolle aus.")
+                st.warning("Keine IST-Rolle ausgewählt. Bitte wechseln Sie zu Tab 1 und wählen Sie eine Rolle aus.")
                 return
             
             if selected_kldb_code:
@@ -3775,7 +3775,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                     
                     if current_profile:
                         st.markdown("---")
-                        st.subheader("📊 Kompetenzabgleich: IST vs. SOLL")
+                        st.subheader("Kompetenzabgleich: IST vs. SOLL")
                         
                         # Aktuelle Skills der IST-Rolle
                         current_skills = current_profile['skills']
@@ -3820,7 +3820,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                             col1, col2 = st.columns(2)
                             
                             with col1:
-                                st.write("**🔥 Essential Skills:**")
+                                st.write("**Essential Skills:**")
                                 if essential_skills:
                                     for skill in essential_skills:
                                         skill_type = ""
@@ -3834,7 +3834,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                 else:
                                     st.write("Keine Essential Skills zugewiesen")
                                 
-                                st.write("**💡 Optional Skills:**")
+                                st.write("**Optional Skills:**")
                                 if optional_skills:
                                     for skill in optional_skills:
                                         skill_type = ""
@@ -3849,7 +3849,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                     st.write("Keine Optional Skills zugewiesen")
                             
                             with col2:
-                                st.write("**📊 Skill-Statistiken:**")
+                                st.write("**Skill-Statistiken:**")
                                 st.write(f"• **Essential Skills:** {len(essential_skills)}")
                                 st.write(f"• **Optional Skills:** {len(optional_skills)}")
                                 st.write(f"• **Manuelle Skills:** {len(manual_skills)}")
@@ -3858,7 +3858,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                 # Zeige aktuelle Rolle
                                 if current_profile.get('current_role'):
                                     current_role = current_profile['current_role']
-                                    st.write("**👤 Aktuelle Rolle:**")
+                                    st.write("**Aktuelle Rolle:**")
                                     st.write(f"• **KldB-Code:** {current_role.get('KldB_Code', 'N/A')}")
                                     st.write(f"• **KldB-Rolle:** {current_role.get('KldB_Label', 'N/A')}")
                                     st.write(f"• **ESCO-Rolle:** {current_role.get('ESCO_Label', 'N/A')}")
@@ -3892,7 +3892,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                 st.write(f"  ... und {len(future_skills_from_archi) - 10} weitere")
                         
                         with col2:
-                            st.write("**✅ Übereinstimmende Skills:**")
+                            st.write("**Übereinstimmende Skills:**")
                             if matching_skills:
                                 st.success(f"{len(matching_skills)} von {len(future_skills_from_archi)} SOLL-Skills bereits vorhanden")
                                 
@@ -3901,12 +3901,12 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                 optional_matches = [s for s in matching_skills if not s['is_essential']]
                                 
                                 if essential_matches:
-                                    st.write("**🔥 Essential Skills:**")
+                                    st.write("**Essential Skills:**")
                                     for skill in essential_matches:
                                         st.write(f"• {skill['skill_name']}")
                                 
                                 if optional_matches:
-                                    st.write("**💡 Optional Skills:**")
+                                    st.write("**Optional Skills:**")
                                     for skill in optional_matches:
                                         st.write(f"• {skill['skill_name']}")
                             else:
@@ -3915,11 +3915,11 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                         # Kursempfehlungen für fehlende Skills
                         if missing_skills:
                             st.markdown("---")
-                            st.subheader("📚 Kursempfehlungen für fehlende Skills")
+                            st.subheader("Kursempfehlungen für fehlende Skills")
                             
-                            st.info(f"🎯 **Generiere Kursempfehlungen für {len(missing_skills)} fehlende Skills...**")
+                            st.info(f"**Generiere Kursempfehlungen für {len(missing_skills)} fehlende Skills...**")
                             
-                            if st.button("🎓 Kursempfehlungen generieren", key="generate_course_recommendations_tab2"):
+                            if st.button("Kursempfehlungen generieren", key="generate_course_recommendations_tab2"):
                                 with st.spinner("Generiere Kursempfehlungen für fehlende Skills..."):
                                     try:
                                         # Konvertiere fehlende Skills in das richtige Format
@@ -3927,7 +3927,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                         
                                         # Begrenze die Anzahl der Skills für bessere Performance
                                         max_skills_to_process = min(10, len(missing_skill_names))
-                                        st.info(f"⚡ Verarbeite die ersten {max_skills_to_process} fehlenden Skills für bessere Performance")
+                                        st.info(f"Verarbeite die ersten {max_skills_to_process} fehlenden Skills für bessere Performance")
                                         
                                         # Rufe die Funktion auf
                                         recommendations = find_udemy_courses_for_skills(
@@ -3937,7 +3937,7 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                         )
                                         
                                         if recommendations:
-                                            st.success(f"✅ {len(recommendations)} Kursempfehlungen gefunden!")
+                                            st.success(f"{len(recommendations)} Kursempfehlungen gefunden!")
                                             
                                             # Gruppiere nach Skill
                                             skill_groups = {}
@@ -3949,13 +3949,13 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                             
                                             # Zeige Empfehlungen gruppiert nach Skill mit Scoring
                                             for skill_name, skill_recs in skill_groups.items():
-                                                st.write(f"**📖 Kurse für: {skill_name}**")
+                                                st.write(f"**Kurse für: {skill_name}**")
                                                 
                                                 # Sortiere nach Similarity Score
                                                 skill_recs.sort(key=lambda x: x.get('similarity_score', 0), reverse=True)
                                                 
                                                 for i, course in enumerate(skill_recs, 1):
-                                                    with st.expander(f"🎯 {i}. {course.get('course_title', 'Unbekannter Kurs')} - Score: {course.get('similarity_score', 0):.3f}", expanded=False):
+                                                    with st.expander(f"{i}. {course.get('course_title', 'Unbekannter Kurs')} - Score: {course.get('similarity_score', 0):.3f}", expanded=False):
                                                         col1, col2, col3 = st.columns([3, 1, 1])
                                                         
                                                         with col1:
@@ -3989,11 +3989,11 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                                 
                                                 st.markdown("---")
                                         else:
-                                            st.warning("❌ Keine Kursempfehlungen gefunden!")
-                                            st.info("💡 Versuchen Sie es mit anderen Skills oder überprüfen Sie die Udemy-Daten.")
+                                            st.warning("Keine Kursempfehlungen gefunden!")
+                                            st.info("Versuchen Sie es mit anderen Skills oder überprüfen Sie die Udemy-Daten.")
                                             
                                             # Fallback: Zeige manuelle Beispielkurse
-                                            st.subheader("📚 Beispiel-Kursempfehlungen")
+                                            st.subheader("Beispiel-Kursempfehlungen")
                                             st.info("Da keine automatischen Empfehlungen gefunden wurden, zeigen wir Ihnen allgemeine Kursempfehlungen:")
                                             
                                             for skill_name in missing_skill_names[:5]:
@@ -4006,15 +4006,15 @@ def show_xml_based_competency_analysis(employees_df, kldb_esco_df, occupation_sk
                                     
                                     except Exception as e:
                                         st.error(f"Fehler bei der Kursempfehlung: {str(e)}")
-                                        st.info("💡 Bitte versuchen Sie es erneut oder kontaktieren Sie den Administrator.")
+                                        st.info("Bitte versuchen Sie es erneut oder kontaktieren Sie den Administrator.")
                                         st.exception(e)
                         else:
                             st.success("🎉 Alle SOLL-Skills sind bereits vorhanden! Keine Kursempfehlungen nötig.")
                     
                     else:
-                        st.error("❌ Konnte kein Mitarbeiterprofil für die ausgewählte IST-Rolle erstellen.")
+                        st.error("Konnte kein Mitarbeiterprofil für die ausgewählte IST-Rolle erstellen.")
                 else:
-                    st.warning("⚠️ Bitte wählen Sie zuerst einen Mitarbeiter in der Sidebar aus.")
+                    st.warning("Bitte wählen Sie zuerst einen Mitarbeiter in der Sidebar aus.")
         else:
             st.warning("Keine SOLL-Skills in der XML gefunden.")
     
